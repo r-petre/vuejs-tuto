@@ -18,6 +18,13 @@
                     </div>
                     <div class="product-info">
                         <h1>{{ product }}</h1>
+                        <!-- <p v-show="inStock">In Stock</p>  -->
+                        <!-- contrairement à v-if qui va créer dans le DOM l'élément seulement si la condition est vraie, 
+                         v-show affiche ou cache juste l'élément (boolean as param)-->
+                        <p v-if="inventory > 10">In Stock</p>
+                        <p v-if="inventory <= 10 && inventory > 0">Almost out of stock !!</p>
+                        <p v-else>Out of Stock</p>
+                        <p v-show="onSale" class="sales">On Sale !!!</p>
                     </div>
                 </div>
             </div>

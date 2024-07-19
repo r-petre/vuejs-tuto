@@ -10,21 +10,71 @@
     </head>
     <body>
         <div id="app">
+            <div class="nav-bar"></div>
+
+            <div class="cart">Cart({{ cart }})</div>
+
             <div class="product-display">
                 <div class="product-container">
                     <div class="product-image">
-                        <img v-bind:src="image">
+                        <img v-bind:src="[inStock ? image : outOfStockImage]">
                         <!-- same as above : <img :src="image"> -->
                     </div>
                     <div class="product-info">
-                        <h1>{{ product }}</h1>
+                        <h1>{{ title }}</h1>
+
+                        <!-- <div class="color-circle" :class="{active: isActive}"></div> => if active is true combine classes color-circle and active -->
+                        <!-- it's like doing <div class="color-circle active"></div> -->
+                        <!-- can use ternary operators <div :class="[isActive ? activeClass : '']"></div> -->
+
                         <!-- <p v-show="inStock">In Stock</p>  -->
                         <!-- contrairement à v-if qui va créer dans le DOM l'élément seulement si la condition est vraie, 
                          v-show affiche ou cache juste l'élément (boolean as param)-->
-                        <p v-if="inventory > 10">In Stock</p>
+
+                        <!-- <p v-if="inventory > 10">In Stock</p>
                         <p v-if="inventory <= 10 && inventory > 0">Almost out of stock !!</p>
-                        <p v-else>Out of Stock</p>
+                        <p v-else>Out of Stock</p> -->
+
+                        <p v-if="inStock">In Stock</p>
+                        <p v-else>Out of Stock !! T.T</p>
                         <p v-show="onSale" class="sales">On Sale !!!</p>
+                        <ul>
+                            <li v-for="detail in details">{{detail}}</li> <!-- like for (detail in details) {} -->
+                        </ul>
+                        <!-- <div v-for="variant in variants" 
+                        :key="variant.id" 
+                        @mouseover='updateImage(variant.image)'
+                        class="color-circle"
+                        :style="{ backgroundColor: variant.color}"></div> -->
+                        <!--<tbody>
+                            <template v-for="variant in variants">
+                                <tr></tr>
+                                <!- <tr :key="variant.id"
+                                @mouseover='updateImage(variant.image)'
+                                class="color-circle"
+                                :style="{ backgroundColor: variant.color }"></tr> ->
+                                <tr>{{ variant.color}}</tr>
+                            </template>
+                        </tbody> -->
+                        <table>
+                            <tr >
+                                <td v-for="(variant, index) in variants"
+                                @mouseover='updateVariant(index)'
+                                class="color-circle"
+                                :style="{ backgroundColor: variant.color }"></td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr>
+                                <td><button class="button" 
+                                    @click="addToCart"
+                                    :class="{ disabledButton: !inStock }"
+                                    :disabled="!inStock">Add to Cart</button></td> <!-- '@' replaces 'v-on:' -->
+                                <td><button class="button" 
+                                    @click="removeFromCart" 
+                                    v-show="cart > 0">Remove from Cart</button></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
